@@ -66,7 +66,7 @@ def apply_model(params, Wlin, W0, X, Y, batch_size=4096):
    
 
     # Predict the weights W_hat for the batch
-    W_hat_flat = predict_(params, Wlin, W0, X)
+    W_hat_flat = predict(params, Wlin, W0, X)
     W_hat = W_hat_flat.reshape(-1, num_p, num_ch)
 
     # Apply the weights to Y to get the final prediction P_hat
