@@ -4,8 +4,8 @@ from IPython import embed
 from matplotlib.pylab import plt
 
 
-efit_name = [RXPT1, RXPT2, ZXPT1 ,ZXPT2 , Z0,R0 ,TRIBOT, TRITOP, KAPPA ,AMINOR, DRSEP]
-power_params = [P_SOL,P_ldivL,P_ldivR,P_udivL,P_udivR,P_ldiv,P_udiv, P_core,P_axis,P_tot]
+efit_name = ['RXPT1', 'RXPT2', 'ZXPT1' ,'ZXPT2' , 'Z0','R0' ,'TRIBOT', 'TRITOP', 'KAPPA' ,'AMINOR', 'DRSEP']
+power_params = ['P_SOL','P_ldivL','P_ldivR','P_udivL','P_udivR','P_ldiv','P_udiv', 'P_core','P_axis','P_tot']
 
 
 
@@ -356,10 +356,10 @@ if __name__ == "__main__":
     mlp_params, Wlin, W0 = load_network(network_file)
     
     import sys
-    real_time = True
+    real_time = False
     if len(sys.argv) > 2:
         shot = int(sys.argv[1])
-        real_time = False
+        real_time = True
     elif len(sys.argv) > 1:
         shot = int(sys.argv[1])
     else:
@@ -380,15 +380,18 @@ if __name__ == "__main__":
     ax = np.ravel(ax)
     for i, p in enumerate(power_params):
         ax[i].set_title(p)
-        ax[i].plot(tvec/1e3,  P_predicted[:,i],'b-')
-        ax[i].plot(power_tomo.get('tvec',0),  power_tomo.get(p,0),'r--')
+        ax[i].plot(tvec/1e3,  P_predicted[:,i],'b-',label='NN prediction')
+        
+        if p in power_tomo:
+            ax[i].plot(power_tomo.get('tvec',0),  power_tomo.get(p,0),'r--',label='PyTOMO')
 
       
         if p in legacy_power:
-            ax[i].plot(legacy_power['time']/1e3, legacy_power[p],':')
+            ax[i].plot(legacy_power['time']/1e3, legacy_power[p],':',label='MDS+ signal')
             
             
         ax[i].axhline(0)
+    ax[-1].legend(loc='best')
     ax[0].set_xlim(0, 7)
     ax[0].set_ylim(0, np.median(P_predicted[P_predicted[:,-1] > np.median(P_predicted[:,-1]),-1]) * 2)
     plt.tight_layout()
