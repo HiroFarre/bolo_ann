@@ -246,7 +246,7 @@ def load_mds_data(shot, EFIT = 'EFITRT1', realtime_bolo=True):
         print('Load standart BOLO data')
         
     import MDSplus
-    mdsserver = 'localhost'
+    mdsserver = 'atlas.gat.com'
     MDSconn = MDSplus.Connection(mdsserver)
 
    
